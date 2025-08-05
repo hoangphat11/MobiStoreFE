@@ -2,7 +2,7 @@ import { Card, Col } from "antd";
 import styled from "styled-components";
 
 export const Container = styled.div`
-  padding: 20px 120px;
+  padding: 100px 120px;
   width: 100%;
   background: #efefef
 `;

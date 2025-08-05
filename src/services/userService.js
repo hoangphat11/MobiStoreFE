@@ -13,7 +13,7 @@ const postLogout = () => {
 }
 
 const getAllUsers = () => {
-    return axios.get(`/users`);
+    return axios.get(`/`);
 }
 
 const getDetailUser = (id) => {

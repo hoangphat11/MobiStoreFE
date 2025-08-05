@@ -15,11 +15,14 @@ const getDetailOrder = (orderId, id) => {
 const postCreateNewOrder = (data) => {
     return axios.post('/order/create', { ...data });
 }
+const updateOrderStatus = (orderId, status) => {
+    return axios.put(`/order/update-status/${orderId}`, { orderStatus: status });
+};
 
 const deleteOrder = ({ orderId, id }) => {
     return axios.delete(`/order/delete/${orderId}`, { params: { id } });
 }
 
 export {
-    getAllOrders, getOrdersByUserId, postCreateNewOrder, getDetailOrder, deleteOrder
+    getAllOrders, getOrdersByUserId, postCreateNewOrder, getDetailOrder, deleteOrder, updateOrderStatus
 };
