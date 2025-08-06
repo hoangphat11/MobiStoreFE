@@ -15,7 +15,7 @@ export const useOrders = () => {
             }
         } catch (error) {
             toast.error(error?.message ?? 'Failed while fetching Orders');
-            console.log(error);
+            console.log("hehehe:",error);
         }
     }, []);
 

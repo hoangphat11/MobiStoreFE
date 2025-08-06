@@ -17,7 +17,7 @@ const OrderTable = () => {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
 
-  console.log(listOrders);
+  console.log("hehe",listOrders);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
