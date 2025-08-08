@@ -1,73 +1,173 @@
-import React from 'react';
-import { RadialBarChart, RadialBar, Legend, ResponsiveContainer } from 'recharts';
+import React from "react";
+import { Card, Row, Col, Statistic } from "antd";
+import {
+  UserOutlined,
+  ShoppingOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  Cell,
+} from "recharts";
+import { useUsers } from "../../hooks/useUsers";
+import { useProducts } from "../../hooks/useProducts";
+import { useOrders } from "../../hooks/useOrders";
 
-const data = [
-    {
-        name: '18-24',
-        uv: 31.47,
-        pv: 2400,
-        fill: '#8884d8',
-    },
-    {
-        name: '25-29',
-        uv: 26.69,
-        pv: 4567,
-        fill: '#83a6ed',
-    },
-    {
-        name: '30-34',
-        uv: 15.69,
-        pv: 1398,
-        fill: '#8dd1e1',
-    },
-    {
-        name: '35-39',
-        uv: 8.22,
-        pv: 9800,
-        fill: '#82ca9d',
-    },
-    {
-        name: '40-49',
-        uv: 8.63,
-        pv: 3908,
-        fill: '#a4de6c',
-    },
-    {
-        name: '50+',
-        uv: 2.63,
-        pv: 4800,
-        fill: '#d0ed57',
-    },
-    {
-        name: 'unknow',
-        uv: 6.67,
-        pv: 4800,
-        fill: '#ffc658',
-    },
-];
+const DashboardChart = () => {
+  const { listUsers, isLoading: loadingUsers } = useUsers();
+  const { listProducts, isLoading: loadingProducts } = useProducts();
+  const { listOrders, isLoading: loadingOrders } = useOrders();
 
-const style = {
-    top: '50%',
-    right: 0,
-    transform: 'translate(0, -50%)',
-    lineHeight: '24px',
-};
-
-const PieChartComponent = () => {
+  if (loadingUsers || loadingProducts || loadingOrders) {
     return (
-        <ResponsiveContainer width="100%" height="100%">
-            <RadialBarChart cx="50%" cy="50%" innerRadius="10%" outerRadius="80%" barSize={10} data={data}>
-                <RadialBar
-                    minAngle={15}
-                    label={{ position: 'insideStart', fill: '#fff' }}
-                    background
-                    clockWise
-                    dataKey="uv"
-                />
-                <Legend iconSize={10} layout="vertical" verticalAlign="middle" wrapperStyle={style} />
-            </RadialBarChart>
-        </ResponsiveContainer>
+      <p style={{ textAlign: "center", padding: "20px" }}>
+        Đang tải Dashboard...
+      </p>
     );
+  }
+
+  const totalUsers = listUsers?.length || 0;
+  const totalProducts = listProducts?.length || 0;
+  const totalOrders = listOrders?.length || 0;
+
+  const data = [
+    { name: "Users", total: totalUsers },
+    { name: "Products", total: totalProducts },
+    { name: "Orders", total: totalOrders },
+  ];
+
+  const colors = ["#1890ff", "#52c41a", "#fa8c16"];
+
+  return (
+    <div style={{ padding: "24px", background: "#f5f6fa", minHeight: "100vh" }}>
+      {/* Thẻ tổng quan */}
+      <h1>Dashboard</h1>
+      <Row gutter={[16, 16]} style={{ marginBottom: "20px" }}>
+        <Col xs={24} sm={8}>
+          <Card
+            bordered={false}
+            style={{
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            }}
+          >
+            <Statistic
+              title="Tổng số Users"
+              value={totalUsers}
+              prefix={
+                <div
+                  style={{
+                    background: "#e6f7ff",
+                    borderRadius: "50%",
+                    padding: "8px",
+                    marginRight: "8px",
+                  }}
+                >
+                  <UserOutlined style={{ color: "#1890ff" }} />
+                </div>
+              }
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={8}>
+          <Card
+            bordered={false}
+            style={{
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            }}
+          >
+            <Statistic
+              title="Tổng số Products"
+              value={totalProducts}
+              prefix={
+                <div
+                  style={{
+                    background: "#f6ffed",
+                    borderRadius: "50%",
+                    padding: "8px",
+                    marginRight: "8px",
+                  }}
+                >
+                  <ShoppingOutlined style={{ color: "#52c41a" }} />
+                </div>
+              }
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={8}>
+          <Card
+            bordered={false}
+            style={{
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            }}
+          >
+            <Statistic
+              title="Tổng số Orders"
+              value={totalOrders}
+              prefix={
+                <div
+                  style={{
+                    background: "#fff7e6",
+                    borderRadius: "50%",
+                    padding: "8px",
+                    marginRight: "8px",
+                  }}
+                >
+                  <ShoppingCartOutlined style={{ color: "#fa8c16" }} />
+                </div>
+              }
+            />
+          </Card>
+        </Col>
+      </Row>
+
+      {/* Biểu đồ cột */}
+      <Card
+        title="Thống kê số lượng Users - Products - Orders"
+        bordered={false}
+        style={{
+          borderRadius: "12px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+        }}
+      >
+        <ResponsiveContainer width="100%" height={350}>
+          <BarChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+            <XAxis dataKey="name" />
+            <YAxis allowDecimals={false} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#fff",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+              }}
+            />
+            <Legend />
+            <Bar dataKey="total" radius={[8, 8, 0, 0]}>
+              {data.map((_, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={colors[index % colors.length]}
+                />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </Card>
+    </div>
+  );
 };
 
-export default PieChartComponent;
+export default DashboardChart;
